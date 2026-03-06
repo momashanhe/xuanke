@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.momashanhe.xuanke.mapper.SelectionMapper">
+  <select id="listByStudentId" resultType="com.momashanhe.xuanke.entity.Selection">
+    SELECT s.*, c.name as courseName, t.name as teacherName, c.credit
+    FROM selection s
+         LEFT JOIN course c ON s.course_id = c.id
+         LEFT JOIN teacher t ON c.teacher_id = t.id
+    WHERE s.student_id = #{studentId}
+      AND t.status = 1
+  </select>
+  <select id="countByStudentIdAndCourseId" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM selection
+    WHERE student_id = #{studentId}
+      AND course_id = #{courseId}
+  </select>
+  <select id="countByCourseId" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM selection
+    WHERE course_id = #{courseId}
+  </select>
+  <insert id="insert" parameterType="com.momashanhe.xuanke.entity.Selection">
+    INSERT INTO selection (student_id, course_id, select_time)
+    VALUES (#{studentId}, #{courseId}, NOW())
+  </insert>
+  <delete id="deleteById">
+    DELETE
+    FROM selection
+    WHERE id = #{id}
+  </delete>
+  <delete id="deleteByCourseId">
+    DELETE
+    FROM selection
+    WHERE course_id = #{courseId}
+  </delete>
+  <delete id="deleteByCourseIdList">
+    DELETE
+    FROM selection
+    WHERE course_id IN
+    <foreach collection="courseIdList" item="courseId" open="(" close=")" separator=",">
+      #{courseId}
+    </foreach>
+  </delete>
+  <delete id="deleteByStudentId">
+    DELETE
+    FROM selection
+    WHERE student_id = #{studentId}
+  </delete>
+</mapper>

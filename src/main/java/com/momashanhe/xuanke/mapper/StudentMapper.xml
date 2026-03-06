@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.momashanhe.xuanke.mapper.StudentMapper">
+  <select id="findByUsername" resultType="com.momashanhe.xuanke.entity.Student">
+    SELECT *
+    FROM student
+    WHERE username = #{username}
+      AND status = 1
+  </select>
+  <select id="findById" resultType="com.momashanhe.xuanke.entity.Student">
+    SELECT *
+    FROM student
+    WHERE id = #{id}
+      AND status = 1
+  </select>
+  <select id="list" resultType="com.momashanhe.xuanke.entity.Student">
+    SELECT *
+    FROM student
+    WHERE status = 1
+  </select>
+  <insert id="insert" parameterType="com.momashanhe.xuanke.entity.Student">
+    INSERT INTO student (username, password, name, phone, email, status)
+    VALUES (#{username}, #{password}, #{name}, #{phone}, #{email}, 1)
+  </insert>
+  <update id="updateById" parameterType="com.momashanhe.xuanke.entity.Student">
+    UPDATE student
+    <set>
+      <if test="password != null">password = #{password},</if>
+      <if test="name != null">name = #{name},</if>
+      <if test="phone != null">phone = #{phone},</if>
+      <if test="email != null">email = #{email},</if>
+    </set>
+    WHERE id = #{id}
+  </update>
+  <update id="deleteById">
+    UPDATE student
+    SET status = 0
+    WHERE id = #{id}
+  </update>
+</mapper>
