@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.momashanhe.xuanke.mapper.CourseMapper">
+  <select id="findById" resultType="com.momashanhe.xuanke.entity.Course">
+    SELECT c.*, t.name as teacherName
+    FROM course c
+         LEFT JOIN teacher t ON c.teacher_id = t.id
+    WHERE c.id = #{id}
+      AND c.status = 1
+  </select>
+  <select id="list" resultType="com.momashanhe.xuanke.entity.Course">
+    SELECT c.*, t.name as teacherName
+    FROM course c
+         LEFT JOIN teacher t ON c.teacher_id = t.id
+    WHERE c.status = 1
+  </select>
+  <select id="listByTeacherId" resultType="com.momashanhe.xuanke.entity.Course">
+    SELECT c.*, t.name as teacherName
+    FROM course c
+         LEFT JOIN teacher t ON c.teacher_id = t.id
+    WHERE c.teacher_id = #{teacherId}
+      AND c.status = 1
+  </select>
+  <insert id="insert" parameterType="com.momashanhe.xuanke.entity.Course">
+    INSERT INTO course (name, teacher_id, credit, capacity, schedule, location, description, status)
+    VALUES (#{name}, #{teacherId}, #{credit}, #{capacity}, #{schedule}, #{location}, #{description}, 1)
+  </insert>
+  <update id="updateById" parameterType="com.momashanhe.xuanke.entity.Course">
+    UPDATE course
+    <set>
+      <if test="name != null">name = #{name},</if>
+      <if test="credit != null">credit = #{credit},</if>
+      <if test="capacity != null">capacity = #{capacity},</if>
+      <if test="schedule != null">schedule = #{schedule},</if>
+      <if test="location != null">location = #{location},</if>
+      <if test="description != null">description = #{description},</if>
+    </set>
+    WHERE id = #{id}
+  </update>
+  <update id="deleteById">
+    UPDATE course
+    SET status = 0
+    WHERE id = #{id}
+  </update>
+  <delete id="deleteByTeacherId">
+    UPDATE course
+    SET status = 0
+    WHERE teacher_id = #{teacherId}
+  </delete>
+</mapper>
